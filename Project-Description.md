@@ -3,9 +3,9 @@
 Team Name: KFD
 
 Members:
-Fiona O'Connell: oconnefa@mail.uc.edu - CS
-Kelly Deal: dealka@mail.uc.edu - CS
-Danni Krauser: krausedc@mail.uc.edu - CS
+- Fiona O'Connell: oconnefa@mail.uc.edu - CS
+- Kelly Deal: dealka@mail.uc.edu - CS
+- Danni Krauser: krausedc@mail.uc.edu - CS
 
 Project Topic:
 We will research the benefit of migrating a compute-intensive software algorithm to hardware. This will include:
