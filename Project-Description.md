@@ -1,6 +1,6 @@
 # Senior Design - CS5001
 
-Team Name: 
+Team Name: KFD
 
 Members:         Email:                 Major:
 Fiona O'Connell (oconnefa@mail.uc.edu)  CS
