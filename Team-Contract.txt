@@ -1,0 +1,38 @@
+Senior Design Team Contract
+
+Members:
+Fiona O'Connell
+oconnefa@mail.uc.edu
+CS
+Kelly Deal
+dealka@mail.uc.edu
+CS
+Danni Krauser
+krausedc@mail.uc.edu
+CS
+Morgan Cook
+cook3mk@mail.uc.edu
+EE/CE
+
+Team Meetings:
+We’ll aim to hold virtual meetings with all members at least once a week to discuss objectives, address challenges, and track progress. Meeting frequency, location, and individual members present may vary.
+
+Project Focus:
+Hardware acceleration: we’ll research and quantify the benefits of migrating a compute-intensive machine learning algorithm to a hardware accelerator. We’ll measure and compare the performance, power consumption, and latency of a software-only implementation against a hardware-accelerated version.
+- Develop CPU-only software; analyse performance and identify bottlenecks.
+- Use HLS to convert code to VHDL; simulate design, then integrate new hardware with the ARM processor.
+- Implement hardware in the FPGA; create an application for data transfers.
+- Analyze and present data; draw conclusions about the benefits of hardware acceleration.
+
+Team Roles: 
+Fiona O'Connell
+Hardware design & software
+Kelly Deal
+Software baseline
+Danni Krauser
+Data analysis & presentation
+Morgan Cook
+Hardware design & implementation
+
+
+
