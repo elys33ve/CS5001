@@ -1,5 +1,5 @@
 
-K: 1. Research and choose software algorithms to implement.
+K: 1. Research software algorithms to implement.
 K: 2. Develop the CPU-only software implementation in C++ 
 K: 3. Implement the test vectors and datasets for validation and performance measurement.
 K: 4. Measure the baseline latency, throughput, and CPU usage of the C++ software on the ARM processor
