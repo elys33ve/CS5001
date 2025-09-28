@@ -1,5 +1,4 @@
 
-** add the research
 
 1. Develop the CPU-only software implementation in C++ 
 2. Implement the test vectors and datasets for validation and performance measurement.
