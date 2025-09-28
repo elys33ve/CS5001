@@ -6,7 +6,7 @@ K: Measure the baseline latency, throughput, and CPU usage of the C++ software o
 K: Analyze the C++ software to identify the bottleneck for hardware migration.
 
 F: Design the core architecture of the hardware accelerator
-F: Validate the generated hardware IP core using a simulation testbench (Python's cocotb)
+D: Validate the generated hardware IP core using a simulation testbench (Python's cocotb)
 F: Create the Vivado block diagram to integrate the custom hardware IP core with the ARM processor and memory system.
 F: Define the AXI-Lite interface and register map for sending control signals and retrieving status to/from the accelerator
 F: Configure AXI interfaces for efficient data transfer between memory and the hardware accelerator
@@ -22,6 +22,7 @@ D: Measure latency and throughput metrics of the hardware-accelerated version ru
 D: Determine power consumption of the Zynq board during the execution of both the baseline and accelerated tests
 D: Create visuals to present the quantifiable results of the hardware acceleration.
 
-
-
+F - Fiona
+D - Danni
+K - Kelly
 
