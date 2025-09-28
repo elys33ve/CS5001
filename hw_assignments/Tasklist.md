@@ -5,7 +5,6 @@
 3. Measure the baseline latency, throughput, and CPU usage of the C++ software on the ARM processor
 4. Analyze the C++ software to identify the bottleneck for hardware migration.
 
-5. Convert the bottleneck into synthesizable VHDL/Verilog code using the Vitis HLS tool.
 6. Design the core architecture of the hardware accelerator
 7. Validate the generated hardware IP core using a simulation testbench (Python's cocotb)
 8. Create the Vivado block diagram to integrate the custom hardware IP core with the ARM processor and memory system.
