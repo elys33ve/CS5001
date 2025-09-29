@@ -1,3 +1,4 @@
+Task List
 
 K: Research software algorithms to implement.
 K: Develop the CPU-only software implementation in C++ 
@@ -11,6 +12,7 @@ F: Create the Vivado block diagram to integrate the custom hardware IP core with
 F: Define the AXI-Lite interface and register map for sending control signals and retrieving status to/from the accelerator
 F: Configure AXI interfaces for efficient data transfer between memory and the hardware accelerator
 F: Document the memory and I/O mapping required for the host C++ application to communicate with the hardware IP
+D: Research design patterns for integrating the ARM software driver with the generated AXI-Lite hardware IP core registers.
 
 F: Synthesize, place, and route the complete integrated hardware design onto the Zynq FPGA fabric
 F: Verify the generation of the bitstream and load the hardware configuration onto the Zynq board.
