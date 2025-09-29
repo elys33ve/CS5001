@@ -10,9 +10,6 @@ CS
 Danni Krauser
 krausedc@mail.uc.edu
 CS
-Morgan Cook
-cook3mk@mail.uc.edu
-EE/CE
 
 Team Meetings:
 We’ll aim to hold virtual meetings with all members at least once a week to discuss objectives, address challenges, and track progress. Meeting frequency, location, and individual members present may vary.
@@ -31,8 +28,6 @@ Kelly Deal
 Software baseline
 Danni Krauser
 Data analysis & presentation
-Morgan Cook
-Hardware design & implementation
 
 
 
