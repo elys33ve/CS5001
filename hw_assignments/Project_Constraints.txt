@@ -1,0 +1,15 @@
+Constraints Essay
+Economic constraints: We are burrowing access to the hardware (UltraZed™-EG SOM
+Hardware) and verification software (Aldec Riviera Pro) for this project from Fiona’s co-op
+employer, Quasonix Inc. We will otherwise be relying on open-source software. There are no
+other significant costs associated with this project.
+Professional constraints: In theory, this project should be able to be completed with our own
+skills, current experience, and some research. However, if we come across any problems
+(especially regarding the hardware), we can contact and work with a specialist from Quasonix.
+This project should have a positive impact on our professional development. Not only does it
+give the members of our group to demonstrate our knowledge, but it also gives us a chance to
+learn from the other members in our group and gain experience in other areas.
+Environmental constraints: Our project is finding more efficient ways to run energy-intensive
+algorithms via hardware acceleration. This would make these energy-intensive algorithms much
+more energy-efficient. However, this comes at the cost of needing the hardware (in our case,
+FPGAs) to run on.

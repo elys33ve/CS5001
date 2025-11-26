@@ -1,0 +1,32 @@
+Ahmed Ghazi Blaiech, Khaled Ben Khalifa, Carlos Valderrama, Marcelo A.C. Fernandes,
+Mohamed Hedi Bedoui, A Survey and Taxonomy of FPGA-based Deep Learning Accelerators, Journal of Systems Architecture, Volume 98, 2019, Pages 331-345, ISSN 1383-7621, https://www.sciencedirect.com/science/article/pii/S1383762118304156)
+Abstract: Deep learning, the fastest growing segment of Artificial Neural Network (ANN), has led to the emergence of many machine learning applications and their implementation across multiple platforms such as CPUs, GPUs and reconfigurable hardware (Field-Programmable Gate Arrays or FPGAs). However, inspired by the structure and function of ANNs, large-scale deep learning topologies require a considerable amount of parallel processing, memory resources, high throughput and significant processing power. Consequently, in the context of real time hardware systems, it is crucial to find the right trade-off between performance, energy efficiency, fast development, and cost. Although limited in size and resources, several approaches have showed that FPGAs provide a good starting point for the development of future deep learning implementation architectures. Through this paper, we briefly review recent work related to the implementation of deep learning algorithms in FPGAs. We will analyze and compare the design requirements and features of existing topologies to finally propose development strategies and implementation architectures for better use of FPGA-based deep learning topologies. In this context, we will examine the frameworks used in these studies, which will allow testing a lot of topologies to finally arrive at the best implementation alternatives in terms of performance and energy efficiency.
+
+Altman MB, Wan W, Hosseini AS, Arabi Nowdeh S, Alizadeh M. Machine learning algorithms for
+FPGA Implementation in biomedical engineering applications: A review. Heliyon. 2024 Feb 18;10(4):e26652. doi: 10.1016/j.heliyon.2024.e26652. PMID: 38434008; PMCID: PMC10906441.
+
+Gao, L., Luo, Z., & Wang, L. (2025). Convolutional Neural Network Acceleration Techniques
+Based on FPGA Platforms: Principles, Methods, and Challenges. Information, 16(10), 914. https://doi.org/10.3390/info16100914
+
+Guo, K., Zeng, S., Yu, J., Wang, Y., & Yang, H. (2017). A survey of FPGA-based neural network
+accelerator. arXiv preprint arXiv:1712.08934.
+
+Lai, Y. (2023). Hardware Architectures of FPGA-based Accelerators for Convolutional Neural
+Networks. Highlights in Science, Engineering and Technology, 62, 54-60. https://doi.org/10.54097/hset.v62i.10424
+
+Liu, Y., Du, H., Wu, Y., & Mo, T. (2025). FPGA Accelerated Deep Learning for Industrial and
+Engineering Applications: Optimal Design Under Resource Constraints. Electronics, 14(4), 703. https://doi.org/10.3390/electronics14040703
+
+Ngo, V., Casadevall, A., Codina, M., Castells-Rufas, D., & Carrabina, J. (2018). A
+high-performance HOG extractor on FPGA. arXiv preprint arXiv:1802.02187.
+
+S. Lahti and T. D. Hämäläinen, "High-Level Synthesis for FPGAs—A Hardware Engineer’s
+Perspective," in IEEE Access, vol. 13, pp. 28574-28593, 2025, doi:
+10.1109/ACCESS.2025.3540320.
+Abstract: The recent decades have witnessed unprecedented advances in the complexity of digital hardware systems, yet their design methods are still mostly based on manual register-transfer level (mRTL) languages such as VHDL and Verilog, introduced in the 1980s. While allowing exact system description, these languages have low productivity and require special expertise. High-level synthesis (HLS) promises to increase the productivity of hardware design by allowing system description from abstract, timeless source code, which is synthesized into optimized RTL code by an HLS tool according to technological constraints. However, HLS is still seen as somewhat immature technology with a non-consolidated offering of tools with varying features. Furthermore, the quality of results (QoR) of HLS is seen to be worse than with mRTL methods. This study sheds light on the status of HLS today. The emphasis is on field-programmable gate arrays (FPGAs) that allow fast development cycles. The study briefly covers the history of HLS, describes the HLS design flow, and lists the benefits and remaining challenges. The offering of current commercial and academic HLS tools is surveyed along with their features. A literature survey covering academic articles published between 2017 and 2024 on the QoR and productivity of HLS is presented. The results show that a gap of some margin still exists between the QoR of the HLS and mRTL methods. However, in productivity, HLS clearly outcompetes mRTL. Based on the study, several recommendations are made for HLS tool developers to close the QoR gap and accelerate the adoption of the method. URL: https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=10878985&isnumber=10820123
+
+Yan, F., Koch, A., & Sinnen, O. (2024). A survey on FPGA-based accelerator for ML models.
+arXiv preprint arXiv:2412.15666.
+
+Z. Zeng and S. S. Sapatnekar, "Energy-efficient Hardware Acceleration of Shallow Machine
+Learning Applications," 2023 Design, Automation & Test in Europe Conference & Exhibition (DATE), Antwerp, Belgium, 2023, pp. 1-6, doi: 10.23919/DATE56975.2023.10137232.Abstract: ML accelerators have largely focused on building general platforms for deep neural networks (DNNs), but less so on shallow machine learning (SML) algorithms. This paper proposes Axiline, a compact, configurable, template-based generator for SML hardware acceleration. Axiline identifies computational kernels as templates that are common to these algorithms and builds a pipelined accelerator for efficient execution. The dataflow graphs of individual ML instances, with different data dimensions, are mapped to the pipeline stages and then optimized by customized algorithms. The approach generates energy-efficient hardware for training and inference of various ML algorithms, as demonstrated with post-layout FPGA and ASIC results. URL: https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=10137232&isnumber=10136706
