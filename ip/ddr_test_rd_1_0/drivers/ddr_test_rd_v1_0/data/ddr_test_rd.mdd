@@ -1,0 +1,10 @@
+
+
+OPTION psf_version = 2.1;
+
+BEGIN DRIVER ddr_test_rd
+	OPTION supported_peripherals = (ddr_test_rd);
+	OPTION copyfiles = all;
+	OPTION VERSION = 1.0;
+	OPTION NAME = ddr_test_rd;
+END DRIVER
