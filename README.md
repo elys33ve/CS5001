@@ -24,7 +24,7 @@
 ## Budget
 ### [Budget](/hw_assignments/Budget.txt)
 
-## Project Subrepositories
+## Project Code
 ### [linux-zynqmp]()
 Linux kernel code with drivers and device tree (dts) for the hardware platform that will be used for the acceleration testing. 
 ### [ip]()
