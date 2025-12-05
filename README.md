@@ -25,14 +25,14 @@
 ### [Budget](/hw_assignments/Budget.txt)
 
 ## Project Code
-### [linux-zynqmp]()
+### [linux-zynqmp](/linux-zynqmp/)
 Linux kernel code with drivers and device tree (dts) for the hardware platform that will be used for the acceleration testing. 
-### [ip]()
-Ip cores that will perform the bus transfers between the FPGA logic and the CPU. Userspace code for both the accelerated and unaccelerated test systems.
-### [platform_boot]()
-Binaries for the first stage boot loader (fsbl), u-boot, FPGA programming files and the Linux kernel.
-### [utils-3eg]()
-FPGA project files for AMD/Xilinx Vivado 2025.1.
+### [ip](/ip/)
+Ip cores that will perform the bus transfers between the FPGA logic and the CPU, and userspace code for both the accelerated and unaccelerated test systems.
+### [platform_boot]
+Binaries for the first stage boot loader (fsbl), u-boot, fpga programming files and the Linux kernel. The corresponding kernel drivers are installed from the build tree (linux-zynqmp).
+### [utils-3eg]
+FPGA project files for AMD/Xilinx Vivado 2025.1. where the ip cores are instantiated and a binary produced to program the FPGA.
 
 ## Appendix
 ### [Meeting Notes](/hw_assignments/Meeting_Notes.txt)
