@@ -1,0 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0
+dtb-$(CONFIG_ARCH_ZYNQMP) += 7ev.dtb
+dtb-$(CONFIG_ARCH_ZYNQMP) += 7ev-3ch.dtb
+
