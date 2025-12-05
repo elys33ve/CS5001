@@ -24,6 +24,16 @@
 ## Budget
 ### [Budget](/hw_assignments/Budget.txt)
 
+## Project Subrepositories
+### [linux-zynqmp]()
+Linux kernel code with drivers and device tree (dts) for the hardware platform that will be used for the acceleration testing. 
+### [ip]()
+Ip cores that will perform the bus transfers between the FPGA logic and the CPU. Userspace code for both the accelerated and unaccelerated test systems.
+### [platform_boot]()
+Binaries for the first stage boot loader (fsbl), u-boot, FPGA programming files and the Linux kernel.
+### [utils-3eg]()
+FPGA project files for AMD/Xilinx Vivado 2025.1.
+
 ## Appendix
 ### [Meeting Notes](/hw_assignments/Meeting_Notes.txt)
 
