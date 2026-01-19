@@ -2,10 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define M 3     // rows of M1
-#define N 3     // cols of M1 / rows of M2
-#define P 3     // cols of M2
-
 #define RNG 100     // range upper limit
 
 // randomly generate integers for matrices m1 and m1,
@@ -16,6 +12,10 @@
 
 int main() {
     srand(time(NULL));
+
+    int M = 100;
+    int N = 100;
+    int P = 100;
 
     int m1[M][N];
     int m2[N][P];
@@ -29,6 +29,10 @@ int main() {
     // save m1 to .bin
     FILE *f1 = fopen("m1.bin", "wb");
     if (f1) {
+        // write header
+        fwrite(&M, sizeof(int), 1, f1);
+        fwrite(&N, sizeof(int), 1, f1);
+        // write matrix
         fwrite(m1, sizeof(int), M*N, f1);
         fclose(f1);
     }
@@ -42,6 +46,10 @@ int main() {
     // save m2 to .bin
     FILE *f2 = fopen("m2.bin", "wb");
     if (f2) {
+        // write header
+        fwrite(&N, sizeof(int), 1, f2);
+        fwrite(&P, sizeof(int), 1, f2);
+        // write matrix
         fwrite(m2, sizeof(int), N*P, f2);
         fclose(f2);
     }
