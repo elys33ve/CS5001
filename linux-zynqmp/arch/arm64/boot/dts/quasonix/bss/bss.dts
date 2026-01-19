@@ -1,0 +1,249 @@
+/dts-v1/;
+#include "zynqmp.dtsi"
+#include "zynqmp-clk-ccf.dtsi"
+#include "pl.dtsi"
+#include "pcw.dtsi"
+#include <dt-bindings/phy/phy.h>
+#include <dt-bindings/net/ti-dp83867.h>
+#include <dt-bindings/input/input.h>
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/pinctrl/pinctrl-zynqmp.h>
+#include <dt-bindings/interrupt-controller/irq.h>
+
+/* From include/dt-bindings/clk/versaclock.h */
+#define VC5_LVPECL   0
+#define VC5_CMOS  1
+#define VC5_HCSL33   2
+#define VC5_LVDS  3
+#define VC5_CMOS2 4
+#define VC5_CMOSD 5
+#define VC5_HCSL25   6
+
+/* <psgtr_phandle> <lane_number> <controller_type> <instance> <refclk> */
+    
+/ {
+	chosen {
+		bootargs = "earlycon console=ttyPS0,115200 clk_ignore_unused root=/dev/mmcblk1p2 rw rootwait";
+		stdout-path = "serial0:115200n8";
+	};
+	aliases {
+		ethernet0 = &gem3;
+		ethernet1 = &gem0;
+		serial0 = &uart0;
+		serial1 = &uart1;
+	};
+	memory {
+		device_type = "memory";
+		reg = <0x0 0x0 0x0 0x7ff00000>, <0x00000008 0x00000000 0x0 0x80000000>;
+	};
+
+   	reserved-memory {
+        #address-cells = <2>;
+        #size-cells = <2>;
+		ranges;
+  
+	   reserved: buffer@0 {
+           no-map;
+		   reg = <0x0 0x10000000 0x0 (1024*1024)>;
+      		   };
+   	};
+  	reserved-driver@0 {
+      	compatible = "xlnx,reserved-memory";
+		memory-region = <&reserved>;
+   	};	
+
+    framebuffer0: framebuffer@10000000 {
+         compatible = "simple-framebuffer";
+         #address-cells = <2>;
+         #size-cells = <2>;
+	 reg = <0x0 0x10000000 0x0 (160 * 128 * 2)>;
+	 width = <160>;
+	 height = <128>;
+	 stride = < (160 * 2) >;
+	 //format = "a8b8g8r8";
+	 format = "r5g6b5";
+	};
+};
+
+
+&gem0 {
+	status = "okay";
+	local-mac-address = [00 0a 35 00 02 90];
+	phy-mode = "rgmii-id";
+	xlnx,ptp-enet-clock = <0x0>;
+	phy-handle = <&phy1>;
+	phy1: phy@19 {
+		reg = <0x19>;
+		ti,rx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>;
+		ti,tx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>;
+		ti,fifo-depth = <0x1>;
+	};
+};
+
+&gem3 {
+	phy-mode = "rgmii-id";
+	status = "okay";
+	xlnx,ptp-enet-clock = <0x0>;
+	local-mac-address = [00 0a 35 00 02 91];
+	phy-mode = "rgmii-id";
+	phy-handle = <&phy0>;
+	phy0: phy@0 {
+		reg = <0x0>;
+		ti,rx-internal-delay = <0x5>;
+		ti,tx-internal-delay = <0x5>;
+		ti,fifo-depth = <0x1>;
+	};
+};
+
+&i2c1 {
+   i2cswitch@70 { /* U7 on UZ3EG SOM, U8 on UZ7EV SOM */
+      compatible = "nxp,pca9543";
+      #address-cells = <1>;
+      #size-cells = <0>;
+      reg = <0x70>;
+      i2c@0 { /* i2c mw 70 0 1 */
+         #address-cells = <1>;
+         #size-cells = <0>;
+         reg = <0>;
+      };
+
+      i2c@1 {
+         #address-cells = <0x1>;
+         #size-cells = <0x0>;
+         reg = <0x1>;
+
+         irps5401@46 { /* IRPS5401 - U24 on UZ7EV SOM*/
+            compatible = "infineon,irps5401";
+            reg = <0x46>;
+         };
+
+         irps5401@47 { /* IRPS5401 - U25 on UZ7EV SOM*/
+            compatible = "infineon,irps5401";
+            reg = <0x47>;
+         };
+
+         ir38063@48 { /* IR38063 - U26 on UZ7EV SOM*/
+            compatible = "infineon,ir38063";
+            reg = <0x48>;
+         };
+      };
+   };
+};
+
+&qspi {
+   #address-cells = <1>;
+   #size-cells = <0>;
+   status = "okay";
+   is-dual = <1>; /* Set for dual-parallel QSPI config */
+   num-cs = <2>;
+   xlnx,fb-clk = <0x1>;
+   flash0: flash@0 {
+      /* The Flash described below doesn't match our board ("micron,n25qu256a"), but is needed */
+      /* so the Flash MTD partitions are correctly identified in /proc/mtd */
+      compatible = "micron,m25p80","jedec,spi-nor"; /* 32MB */
+      #address-cells = <1>;
+      #size-cells = <1>;
+      reg = <0x0>;
+      spi-tx-bus-width = <1>;
+      spi-rx-bus-width = <4>; /* FIXME also DUAL configuration possible */
+      spi-max-frequency = <108000000>; /* Set to 108000000 Based on DC1 spec */
+      /* MTD Partitioning:
+       *   Boot.bin needs at least 20MB
+       *   boot.scr must go at 0x3E80000
+       */
+      partition@qspi-bootbin {
+	      label = "qspi-bootbin";
+	      reg = <0x0 0x2000000>;
+      };
+      partition@qspi-bootscr {
+	      label = "qspi-bootscr";
+	      reg = <0x3E80000 0x80000>;
+      };
+   };
+};
+
+/* SD0 eMMC, 8-bit wide data bus */
+&sdhci0 {
+   status = "okay";
+   bus-width = <8>;
+   max-frequency = <50000000>;
+};
+
+/* SD1 with level shifter */
+&sdhci1 {
+   status = "okay";
+   disable-wp;
+   max-frequency = <50000000>;
+   no-1-8-v;   /* for 1.0 silicon */
+};
+
+&amba_pl {
+	mlscif_common: mlscif_common@80010000 {
+	   compatible = "mlscif_common-1.0";
+	   reg = <0x0 0x80010000 0x0 0x10000>;
+    };
+	mlscif_channel1: mlscif_channel@81010000 {
+	   compatible = "mlscif_channel-1.0";
+	   reg = <0x0 0x81010000 0x0 0x10000>;
+    };
+	mlscif_channel2: mlscif_channel@81020000 {
+	   compatible = "mlscif_channel-1.0";
+	   reg = <0x0 0x81020000 0x0 0x10000>;
+    };
+	mlscif_channel3: mlscif_channel@81030000 {
+	   compatible = "mlscif_channel-1.0";
+	   reg = <0x0 0x81030000 0x0 0x10000>;
+    };
+	mlscif_channel4: mlscif_channel@81040000 {
+	   compatible = "mlscif_channel-1.0";
+	   reg = <0x0 0x81040000 0x0 0x10000>;
+    };
+	mlscif_channel5: mlscif_channel@81050000 {
+	   compatible = "mlscif_channel-1.0";
+	   reg = <0x0 0x81050000 0x0 0x10000>;
+    };
+	mlscif_channel6: mlscif_channel@81060000 {
+	   compatible = "mlscif_channel-1.0";
+	   reg = <0x0 0x81060000 0x0 0x10000>;
+    };
+	mlscif_channel7: mlscif_channel@81070000 {
+	   compatible = "mlscif_channel-1.0";
+	   reg = <0x0 0x81070000 0x0 0x10000>;
+    };
+	mlscif_channel8: mlscif_channel@81080000 {
+	   compatible = "mlscif_channel-1.0";
+	   reg = <0x0 0x81080000 0x0 0x10000>;
+    };
+	mlscif_channel9: mlscif_channel@81090000 {
+	   compatible = "mlscif_channel-1.0";
+	   reg = <0x0 0x81090000 0x0 0x10000>;
+    };
+	mlscif_channel10: mlscif_channel@810a0000 {
+	   compatible = "mlscif_channel-1.0";
+	   reg = <0x0 0x810a0000 0x0 0x10000>;
+    };
+	mlscif_channel11: mlscif_channel@810b0000 {
+	   compatible = "mlscif_channel-1.0";
+	   reg = <0x0 0x810b0000 0x0 0x10000>;
+    };
+	mlscif_channel12: mlscif_channel@810c0000 {
+	   compatible = "mlscif_channel-1.0";
+	   reg = <0x0 0x810c0000 0x0 0x10000>;
+    };
+	mlscif_selector1: mlscif_selector@80200000 {
+	   compatible = "mlscif_selector-1.0";
+	   reg = <0x0 0x80200000 0x0 0x10000>;
+    };
+	mlscif_selector2: mlscif_selector@80210000 {
+	   compatible = "mlscif_selector-1.0";
+	   reg = <0x0 0x80210000 0x0 0x10000>;
+    };
+	mlscif_selector3: mlscif_selector@80220000 {
+	   compatible = "mlscif_selector-1.0";
+	   reg = <0x0 0x80220000 0x0 0x10000>;
+    };
+	mlscif_selector4: mlscif_selector@80230000 {
+	   compatible = "mlscif_selector-1.0";
+	   reg = <0x0 0x80230000 0x0 0x10000>;
+    };
+};

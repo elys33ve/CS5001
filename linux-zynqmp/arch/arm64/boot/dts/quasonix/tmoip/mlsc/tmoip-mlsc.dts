@@ -1,0 +1,596 @@
+/dts-v1/;
+#include "zynqmp.dtsi"
+#include "zynqmp-clk-ccf.dtsi"
+#include "pl.dtsi"
+#include "pcw.dtsi"
+#include <dt-bindings/phy/phy.h>
+#include <dt-bindings/net/ti-dp83867.h>
+#include <dt-bindings/input/input.h>
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/pinctrl/pinctrl-zynqmp.h>
+#include <dt-bindings/interrupt-controller/irq.h>
+
+/* From include/dt-bindings/clk/versaclock.h */
+#define VC5_LVPECL   0
+#define VC5_CMOS  1
+#define VC5_HCSL33   2
+#define VC5_LVDS  3
+#define VC5_CMOS2 4
+#define VC5_CMOSD 5
+#define VC5_HCSL25   6
+
+#define PLATFORM_TYPE_8_CHAN_3EG 0
+#define PLATFORM_TYPE_TMOIP_3CH 1
+#define PLATFORM_TYPE_TMOIP_12CH 2
+#define PLATFORM_TYPE_AVNET_CC7EV 3
+#define PLATFORM_TYPE_XILINX_ZCU102 4
+#define PLATFORM_TYPE_TMOIP_MLSC 5
+#define PLATFORM_TYPE_TMOIP_BSSA 6
+
+/* <psgtr_phandle> <lane_number> <controller_type> <instance> <refclk> */
+    
+/ {
+	chosen {
+		bootargs = "earlycon console=ttyPS0,115200 clk_ignore_unused root=/dev/mmcblk1p2 rw rootwait";
+		stdout-path = "serial0:115200n8";
+	};
+	aliases {
+		ethernet0 = &gem3;
+		ethernet1 = &gem0;
+		serial0 = &uart0;
+		serial1 = &uart1;
+	};
+	memory {
+		device_type = "memory";
+		reg = <0x0 0x0 0x0 0x7ff00000>, <0x00000008 0x00000000 0x0 0x80000000>;
+	};
+
+  	reserved-driver@0 {
+      	compatible = "xlnx,reserved-memory";
+		memory-region = <&reserved_fb>;
+   	};	
+   	reserved-memory {
+        #address-cells = <2>;
+        #size-cells = <2>;
+		ranges;
+  	   reserved_fb: buffer@0 {
+           no-map;
+		   reg = <0x0 0x10000000 0x0 0x4000000>;
+      		   };
+   	};
+
+    framebuffer0: framebuffer@10000000 {
+         compatible = "simple-framebuffer";
+         #address-cells = <2>;
+         #size-cells = <2>;
+	 reg = <0x0 0x10000000 0x0 (160 * 128 * 2)>;
+	 width = <160>;
+	 height = <128>;
+	 stride = < (160 * 2) >;
+	 format = "r5g6b5";
+	};
+    framebuffer1: framebuffer@11000000 {
+         compatible = "simple-framebuffer";
+         #address-cells = <2>;
+         #size-cells = <2>;
+	 reg = <0x0 0x11000000 0x0 (160 * 128 * 2)>;
+	 width = <160>;
+	 height = <128>;
+	 stride = < (160 * 2) >;
+	 format = "r5g6b5";
+	};
+    framebuffer2: framebuffer@12000000 {
+         compatible = "simple-framebuffer";
+         #address-cells = <2>;
+         #size-cells = <2>;
+	 reg = <0x0 0x12000000 0x0 (160 * 128 * 2)>;
+	 width = <160>;
+	 height = <128>;
+	 stride = < (160 * 2) >;
+	 format = "r5g6b5";
+	};
+    framebuffer3: framebuffer@13000000 {
+         compatible = "simple-framebuffer";
+         #address-cells = <2>;
+         #size-cells = <2>;
+	 reg = <0x0 0x13000000 0x0 (160 * 128 * 2)>;
+	 width = <160>;
+	 height = <128>;
+	 stride = < (160 * 2) >;
+	 format = "r5g6b5";
+	};
+};
+
+
+&fpd_dma_chan1 {
+	status = "okay";
+	#dma-cells = <1>;
+	xlnx,bus-width = <128>;
+};
+
+&fpd_dma_chan2 {
+	status = "okay";
+	#dma-cells = <1>;
+	xlnx,bus-width = <128>;
+};
+
+&fpd_dma_chan3 {
+	status = "okay";
+	#dma-cells = <1>;
+	xlnx,bus-width = <128>;
+};
+
+&fpd_dma_chan4 {
+	status = "okay";
+	#dma-cells = <1>;
+	xlnx,bus-width = <128>;
+};
+
+&amba_pl {
+    ddr_mirror0: ddr_mirror@88000000 {
+          compatible = "ddr_mirror-1.0";
+	      clock-names = "axi_lite_aclk", "axis_in_aclk";
+          clocks = <&misc_clk_0>, <&misc_clk_0>;
+          reg = <0x0 0x88000000 0x0 0x1000 0x0 0xb8000000 0x0 0x4000000>;
+          dmas = <&fpd_dma_chan4 0>;
+          dma-names = "dma";
+	};
+	tmoip_system: tmoip_system@800D0000 {
+	   compatible = "tmoip_system-1.0";
+       reg = <0x0 0x800D0000 0x0 0x10000 0x0 0xa0100000 0x0 0x10000>;
+       interrupt-parent = <&gic>;
+       interrupts = <0 92 1>;
+       num_channels = <12>;
+       platform_type = <PLATFORM_TYPE_TMOIP_MLSC>;
+    };
+	ch0: channel@80000000 {
+	      compatible = "channel-1.0";
+	      clock-names = "axi_lite_aclk";
+	      clocks = <&misc_clk_0>, <&misc_clk_0>;
+	      reg = <0x0 0x80000000 0x0 0x10000>,
+              <0x0 0x80010000 0x0 0x10000>,
+              <0x0 0x80080000 0x0 0x10000>;
+              reg-names = "channel_in", "channel_out", "line_test";                                        
+ 	      channel_number = <0>;
+	      refclk_hz = <300000000>;
+              pcmout_init_bitrate = <1000000>;
+        };
+	bitsync0: bit_sync@80410000 {
+	      compatible = "bit_sync-1.0";
+	      clock-names = "axi_lite_aclk";
+	      clocks = <&misc_clk_0>, <&misc_clk_0>;
+	      reg = <0x0 0x80410000 0x0 0x10000>;
+              kp_base_msw = <0x00800000>;
+              kp_base_lsw = <0x00000000>;
+              ki_base_msw = <0x00030000>;
+              ki_base_lsw = <0x00000000>;
+ 	      channel_number = <0>;
+ 	      perr_thresh = <1500000000>;
+	      refclk_hz = <300000000>;
+	};
+	ch1: channel@80020000 {
+	      compatible = "channel-1.0";
+	      clock-names = "axi_lite_aclk";
+	      clocks = <&misc_clk_0>, <&misc_clk_0>;
+	      reg = <0x0 0x80020000 0x0 0x10000>,
+                <0x0 0x80030000 0x0 0x10000>,
+                <0x0 0x800E0000 0x0 0x10000>;
+          reg-names = "channel_in", "channel_out", "line_test";                                        
+ 		  channel_number = <1>;
+		  refclk_hz = <300000000>;
+          pcmout_init_bitrate = <1000000>;
+    };
+	ch2: channel@80040000 {
+	      compatible = "channel-1.0";
+	      clock-names = "axi_lite_aclk";
+	      clocks = <&misc_clk_0>, <&misc_clk_0>;
+	      reg = <0x0 0x80040000 0x0 0x10000>,
+                <0x0 0x80050000 0x0 0x10000>,
+                <0x0 0x800F0000 0x0 0x10000>;
+          reg-names = "channel_in", "channel_out", "line_test";                                        
+ 		  channel_number = <2>;
+		  refclk_hz = <300000000>;
+          pcmout_init_bitrate = <1000000>;
+    };
+	ch3: channel@80090000 {
+	      compatible = "channel-1.0";
+	      clock-names = "axi_lite_aclk";
+	      clocks = <&misc_clk_0>, <&misc_clk_0>;
+	      reg = <0x0 0x80090000 0x0 0x10000>,
+                <0x0 0x800a0000 0x0 0x10000>,
+                <0x0 0x800b0000 0x0 0x10000>;
+          reg-names = "channel_in", "channel_out", "line_test";                                        
+ 		  channel_number = <3>;
+		  refclk_hz = <300000000>;
+          pcmout_init_bitrate = <1000000>;
+    };
+	clocktrack0: clocktrack@80060000 {
+	      compatible = "clocktrack-1.0";
+	      clock-names = "axi_lite_aclk";
+	      clocks = <&misc_clk_0>, <&misc_clk_0>;
+     	  reg = <0x0 0x80060000 0x0 0x10000>;
+		  refclk_hz = <300000000>;
+	      setpointcenter = <250000>;
+	      setpointoffset = <50000>;
+	      mincenter = <1500>;
+	      minoffset = <300>;
+    };
+    dma_central0: dma_central@80070000 {
+          compatible = "dma_central-1.0";
+	      clock-names = "axi_lite_aclk", "axis_in_aclk";
+          clocks = <&misc_clk_0>, <&misc_clk_0>;
+          interrupt-parent = <&gic>;
+          interrupts = <0 89 1>;
+          reg = <0x0 0x80070000 0x0 0x1000 0x0 0xb0000000 0x0 0x100000>;
+          start_channel = <0>;
+          num_channels = <4>;
+          int_retry_cnt = <500000>;
+          dmas = <&fpd_dma_chan1 0>;
+          dma-names = "dma";
+	};
+	ch4: channel@800c0000 {
+	      compatible = "channel-1.0";
+	      clock-names = "axi_lite_aclk";
+	      clocks = <&misc_clk_0>, <&misc_clk_0>;
+	      reg = <0x0 0x800c0000 0x0 0x10000>,
+                <0x0 0x802a0000 0x0 0x10000>,
+                <0x0 0x80100000 0x0 0x10000>;
+          reg-names = "channel_in", "channel_out", "line_test";                                        
+ 		  channel_number = <4>;
+		  refclk_hz = <300000000>;
+          pcmout_init_bitrate = <1000000>;
+    };
+	ch5: channel@80110000 {
+	      compatible = "channel-1.0";
+	      clock-names = "axi_lite_aclk";
+	      clocks = <&misc_clk_0>, <&misc_clk_0>;
+	      reg = <0x0 0x80110000 0x0 0x10000>,
+                <0x0 0x80120000 0x0 0x10000>,
+                <0x0 0x80130000 0x0 0x10000>;
+          reg-names = "channel_in", "channel_out", "line_test";                                        
+ 		  channel_number = <5>;
+		  refclk_hz = <300000000>;
+          pcmout_init_bitrate = <1000000>;
+    };
+	ch6: channel@80140000 {
+	      compatible = "channel-1.0";
+	      clock-names = "axi_lite_aclk";
+	      clocks = <&misc_clk_0>, <&misc_clk_0>;
+	      reg = <0x0 0x80140000 0x0 0x10000>,
+                <0x0 0x80150000 0x0 0x10000>,
+                <0x0 0x80160000 0x0 0x10000>;
+          reg-names = "channel_in", "channel_out", "line_test";                                        
+ 		  channel_number = <6>;
+		  refclk_hz = <300000000>;
+          pcmout_init_bitrate = <1000000>;
+    };
+	ch7: channel@80170000 {
+	      compatible = "channel-1.0";
+	      clock-names = "axi_lite_aclk";
+	      clocks = <&misc_clk_0>, <&misc_clk_0>;
+	      reg = <0x0 0x80170000 0x0 0x10000>,
+                <0x0 0x80180000 0x0 0x10000>,
+                <0x0 0x80190000 0x0 0x10000>;
+          reg-names = "channel_in", "channel_out", "line_test";                                        
+ 		  channel_number = <7>;
+		  refclk_hz = <300000000>;
+          pcmout_init_bitrate = <1000000>;
+    };
+	clocktrack1: clocktrack@801a0000 {
+	      compatible = "clocktrack-1.0";
+	      clock-names = "axi_lite_aclk";
+	      clocks = <&misc_clk_0>, <&misc_clk_0>;
+     	  reg = <0x0 0x801a0000 0x0 0x10000>;
+		  refclk_hz = <300000000>;
+	      setpointcenter = <250000>;
+	      setpointoffset = <50000>;
+	      mincenter = <1500>;
+	      minoffset = <300>;
+    };
+    dma_central1: dma_central@801b0000 {
+          compatible = "dma_central-1.0";
+	      clock-names = "axi_lite_aclk", "axis_in_aclk";
+          clocks = <&misc_clk_0>, <&misc_clk_0>;
+          interrupt-parent = <&gic>;
+          interrupts = <0 90 1>;
+          reg = <0x0 0x801b0000 0x0 0x1000 0x0 0xa0000000 0x0 0x100000>;
+          start_channel = <4>;
+          num_channels = <4>;
+          int_retry_cnt = <500000>;
+          dmas = <&fpd_dma_chan2 0>;
+          dma-names = "dma";
+	};
+	ch8: channel@80220000 {
+	      compatible = "channel-1.0";
+	      clock-names = "axi_lite_aclk";
+	      clocks = <&misc_clk_0>, <&misc_clk_0>;
+	      reg = <0x0 0x80220000 0x0 0x10000>,
+                <0x0 0x80230000 0x0 0x10000>,
+                <0x0 0x80240000 0x0 0x10000>;
+          reg-names = "channel_in", "channel_out", "line_test";                                        
+ 		  channel_number = <8>;
+		  refclk_hz = <300000000>;
+          pcmout_init_bitrate = <1000000>;
+    };
+	ch9: channel@80250000 {
+	      compatible = "channel-1.0";
+	      clock-names = "axi_lite_aclk";
+	      clocks = <&misc_clk_0>, <&misc_clk_0>;
+	      reg = <0x0 0x80250000 0x0 0x10000>,
+                <0x0 0x80260000 0x0 0x10000>,
+                <0x0 0x80270000 0x0 0x10000>;
+          reg-names = "channel_in", "channel_out", "line_test";                                        
+ 		  channel_number = <9>;
+		  refclk_hz = <300000000>;
+          pcmout_init_bitrate = <1000000>;
+    };
+	ch10: channel@801c0000 {
+	      compatible = "channel-1.0";
+	      clock-names = "axi_lite_aclk";
+	      clocks = <&misc_clk_0>, <&misc_clk_0>;
+	      reg = <0x0 0x801c0000 0x0 0x10000>,
+                <0x0 0x801d0000 0x0 0x10000>,
+                <0x0 0x801e0000 0x0 0x10000>;
+          reg-names = "channel_in", "channel_out", "line_test";                                        
+ 		  channel_number = <10>;
+		  refclk_hz = <300000000>;
+          pcmout_init_bitrate = <1000000>;
+    };
+	ch11: channel@801f0000 {
+	      compatible = "channel-1.0";
+	      clock-names = "axi_lite_aclk";
+	      clocks = <&misc_clk_0>, <&misc_clk_0>;
+	      reg = <0x0 0x801f0000 0x0 0x10000>,
+                <0x0 0x80200000 0x0 0x10000>,
+                <0x0 0x80210000 0x0 0x10000>;
+          reg-names = "channel_in", "channel_out", "line_test";                                        
+ 		  channel_number = <11>;
+		  refclk_hz = <300000000>;
+          pcmout_init_bitrate = <1000000>;
+    };
+	clocktrack2: clocktrack@80280000 {
+	      compatible = "clocktrack-1.0";
+	      clock-names = "axi_lite_aclk";
+	      clocks = <&misc_clk_0>, <&misc_clk_0>;
+     	  reg = <0x0 0x80280000 0x0 0x10000>;
+		  refclk_hz = <300000000>;
+	      setpointhi = <300000>;
+	      setpointcenter = <250000>;
+	      setpointoffset = <50000>;
+	      mincenter = <1500>;
+	      minoffset = <300>;
+    };
+    dma_central2: dma_central@80290000 {
+          compatible = "dma_central-1.0";
+	      clock-names = "axi_lite_aclk", "axis_in_aclk";
+          clocks = <&misc_clk_0>, <&misc_clk_0>;
+          interrupt-parent = <&gic>;
+          interrupts = <0 91 1>;
+          reg = <0x0 0x80290000 0x0 0x1000 0x0 0xb1000000 0x0 0x100000>;
+          start_channel = <8>;
+          num_channels = <4>;
+          int_retry_cnt = <500000>;
+          dmas = <&fpd_dma_chan3 0>;
+          dma-names = "dma";
+	};
+    gth_if_224: gth_if@802e0000 {
+       	  compatible = "gth_if-1.0";
+     	  reg = <0x0 0x802e0000 0x0 0x10000>;
+    };
+    gth_if_225: gth_if@80310000 {
+       	  compatible = "gth_if-1.0";
+     	  reg = <0x0 0x80310000 0x0 0x10000>;
+    };
+    si5338: si5338@803C0000 {
+       	  compatible = "si5338-1.0";
+     	  reg = <0x0 0x803C0000 0x0 0x10000>;
+    };
+    mlscif_common: mlscif_common@84010000 {
+	   compatible = "mlscif_common-1.0";
+	   reg = <0x0 0x84010000 0x0 0x10000>;
+    };
+	mlscif_selector1: mlscif_selector@84210000 {
+	   compatible = "mlscif_selector-1.0";
+	   reg = <0x0 0x84210000 0x0 0x10000>;
+    };
+	mlscif_selector2: mlscif_selector@84220000 {
+	   compatible = "mlscif_selector-1.0";
+	   reg = <0x0 0x84220000 0x0 0x10000>;
+    };
+	mlscif_selector3: mlscif_selector@84230000 {
+	   compatible = "mlscif_selector-1.0";
+	   reg = <0x0 0x84230000 0x0 0x10000>;
+    };
+	mlscif_selector4: mlscif_selector@84240000 {
+	   compatible = "mlscif_selector-1.0";
+	   reg = <0x0 0x84240000 0x0 0x10000>;
+    };
+	mlscif_channel1: mlscif_channel@85010000 {
+	   compatible = "mlscif_channel-1.0";
+	   reg = <0x0 0x85010000 0x0 0x10000>;
+    };
+	mlscif_channel2: mlscif_channel@85020000 {
+	   compatible = "mlscif_channel-1.0";
+	   reg = <0x0 0x85020000 0x0 0x10000>;
+    };
+	mlscif_channel3: mlscif_channel@85030000 {
+	   compatible = "mlscif_channel-1.0";
+	   reg = <0x0 0x85030000 0x0 0x10000>;
+    };
+	mlscif_channel4: mlscif_channel@85040000 {
+	   compatible = "mlscif_channel-1.0";
+	   reg = <0x0 0x85040000 0x0 0x10000>;
+    };
+	mlscif_channel5: mlscif_channel@85050000 {
+	   compatible = "mlscif_channel-1.0";
+	   reg = <0x0 0x85050000 0x0 0x10000>;
+    };
+	mlscif_channel6: mlscif_channel@85060000 {
+	   compatible = "mlscif_channel-1.0";
+	   reg = <0x0 0x85060000 0x0 0x10000>;
+    };
+	mlscif_channel7: mlscif_channel@85070000 {
+	   compatible = "mlscif_channel-1.0";
+	   reg = <0x0 0x85070000 0x0 0x10000>;
+    };
+	mlscif_channel8: mlscif_channel@85080000 {
+	   compatible = "mlscif_channel-1.0";
+	   reg = <0x0 0x85080000 0x0 0x10000>;
+    };
+	mlscif_channel9: mlscif_channel@85090000 {
+	   compatible = "mlscif_channel-1.0";
+	   reg = <0x0 0x85090000 0x0 0x10000>;
+    };
+	mlscif_channel10: mlscif_channel@850a0000 {
+	   compatible = "mlscif_channel-1.0";
+	   reg = <0x0 0x850a0000 0x0 0x10000>;
+    };
+	mlscif_channel11: mlscif_channel@850b0000 {
+	   compatible = "mlscif_channel-1.0";
+	   reg = <0x0 0x850b0000 0x0 0x10000>;
+    };
+	mlscif_channel12: mlscif_channel@850c0000 {
+	   compatible = "mlscif_channel-1.0";
+	   reg = <0x0 0x850c0000 0x0 0x10000>;
+    };
+	som2som_gth_224_0: som2som_gth@80300000 {
+	   compatible = "som2som_gth-1.0";
+	   reg = <0x0 0x80300000 0x0 0x10000>;
+    };
+	som2som_gth_224_1: som2som_gth@80320000 {
+	   compatible = "som2som_gth-1.0";
+	   reg = <0x0 0x80320000 0x0 0x10000>;
+    };
+	som2som_gth_224_2: som2som_gth@803D0000 {
+	   compatible = "som2som_gth-1.0";
+	   reg = <0x0 0x803D0000 0x0 0x10000>;
+    };
+	som2som_gth_224_3: som2som_gth@803E0000 {
+	   compatible = "som2som_gth-1.0";
+	   reg = <0x0 0x803E0000 0x0 0x10000>;
+    };
+	mlsc_system0: system_mlsc@803F0000 {
+	   compatible = "system_mlsc-1.0";
+	   reg = <0x0 0x803F0000 0x0 0x10000>;
+    };
+	reg_mirror_check0: reg_mirror_check@80400000 {
+	   compatible = "reg_mirror_check-1.0";
+	   reg = <0x0 0x80400000 0x0 0x10000>;
+    };
+};
+
+&gpio {
+	status = "okay";
+};
+
+&gem0 {
+	status = "okay";
+	local-mac-address = [00 0a 35 00 02 90];
+	phy-mode = "rgmii-id";
+	xlnx,ptp-enet-clock = <0x0>;
+	phy-handle = <&phy1>;
+	phy1: phy@19 {
+		reg = <0x19>;
+		ti,rx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>;
+		ti,tx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>;
+		ti,fifo-depth = <0x1>;
+	};
+};
+
+&gem3 {
+	status = "okay";
+	local-mac-address = [00 0a 35 00 02 91];
+	phy-mode = "rgmii-id";
+	xlnx,ptp-enet-clock = <0x0>;
+	phy-mode = "rgmii-id";
+	phy-handle = <&phy0>;
+	phy0: phy@0 {
+		reg = <0x0>;
+		ti,rx-internal-delay = <0x5>;
+		ti,tx-internal-delay = <0x5>;
+		ti,fifo-depth = <0x1>;
+	};
+};
+
+&i2c1 {
+   i2cswitch@70 { /* U7 on UZ3EG SOM, U8 on UZ7EV SOM */
+      compatible = "nxp,pca9543";
+      #address-cells = <1>;
+      #size-cells = <0>;
+      reg = <0x70>;
+      i2c@0 { /* i2c mw 70 0 1 */
+         #address-cells = <1>;
+         #size-cells = <0>;
+         reg = <0>;
+      };
+
+      i2c@1 {
+         #address-cells = <0x1>;
+         #size-cells = <0x0>;
+         reg = <0x1>;
+
+         irps5401@46 { /* IRPS5401 - U24 on UZ7EV SOM*/
+            compatible = "infineon,irps5401";
+            reg = <0x46>;
+         };
+
+         irps5401@47 { /* IRPS5401 - U25 on UZ7EV SOM*/
+            compatible = "infineon,irps5401";
+            reg = <0x47>;
+         };
+
+         ir38063@48 { /* IR38063 - U26 on UZ7EV SOM*/
+            compatible = "infineon,ir38063";
+            reg = <0x48>;
+         };
+      };
+   };
+};
+
+&qspi {
+   #address-cells = <1>;
+   #size-cells = <0>;
+   status = "okay";
+   is-dual = <1>; /* Set for dual-parallel QSPI config */
+   num-cs = <2>;
+   xlnx,fb-clk = <0x1>;
+   flash0: flash@0 {
+      /* The Flash described below doesn't match our board ("micron,n25qu256a"), but is needed */
+      /* so the Flash MTD partitions are correctly identified in /proc/mtd */
+      compatible = "micron,m25p80","jedec,spi-nor"; /* 32MB */
+      #address-cells = <1>;
+      #size-cells = <1>;
+      reg = <0x0>;
+      spi-tx-bus-width = <1>;
+      spi-rx-bus-width = <4>; /* FIXME also DUAL configuration possible */
+      spi-max-frequency = <108000000>; /* Set to 108000000 Based on DC1 spec */
+      /* MTD Partitioning:
+       *   Boot.bin needs at least 20MB
+       *   boot.scr must go at 0x3E80000
+       */
+      partition@qspi-bootbin {
+	      label = "qspi-bootbin";
+	      reg = <0x0 0x2000000>;
+      };
+      partition@qspi-bootscr {
+	      label = "qspi-bootscr";
+	      reg = <0x3E80000 0x80000>;
+      };
+   };
+};
+
+/* SD0 eMMC, 8-bit wide data bus */
+&sdhci0 {
+   status = "okay";
+   bus-width = <8>;
+   max-frequency = <50000000>;
+};
+
+/* SD1 with level shifter */
+&sdhci1 {
+   status = "okay";
+   disable-wp;
+   max-frequency = <50000000>;
+   no-1-8-v;   /* for 1.0 silicon */
+};
+
