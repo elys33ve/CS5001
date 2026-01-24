@@ -1,7 +1,0 @@
-compile/
-__pycache__/
-dataset.asdb
-dataset.tmp
-dataset.asdbw/
-sim_build/
-results.xml
