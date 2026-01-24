@@ -1,0 +1,30 @@
+CURRENT_VERSION = 1
+#############################
+# register map
+#############################
+CTRL_OFFSET= (0)
+STATUS_OFFSET= (1)
+
+AXIM_IN_BASE_ADDR= (2)
+AXIM_OUT_BASE_ADDR= (3)
+
+FRAME_SIZE_OFFSET= (4)
+LINES_PER_FRAME_SHIFT= (16)
+PAYLOAD_SIZE_BYTES_MASK= 0x0FFF
+
+DELAY_CNTTO= (5)
+
+VERSION= (31)
+
+#CTRL BITS
+RST_MASK= 1
+EN_MASK= (1<<1)
+SHUTDOWN_MASK= (1<<2)
+AXIM_NRST_MASK= (1<<3)
+
+#STATUS BITS
+READ_RESP_ERROR_MASK= 0x0F
+READ_RESP_ERROR_SHIFT= 4
+WRITE_RESP_ERROR_MASK= 0x0F
+
+##################################
