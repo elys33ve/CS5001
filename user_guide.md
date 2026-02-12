@@ -51,6 +51,7 @@ make zynqmp_defconfig
 make -j $(nproc)
 # add sd card path
 sudo make INSTALL_MOD_PATH=/<sdcard> modules_install
+```
 
 ### 3.3 Prepare the Boot Binaries
 `/platform_boot/utils-3eg` to pull in and process all relevant files and copy to the SD card. Run these commands from the host PC terminal:
@@ -64,6 +65,7 @@ make update
 make boot.bin
 # copy the generated files to the boot partition of the SD card
 make install
+```
 	
 ### 3.4 Hardware Startup and Connection
 Once the SD card is prepared and inserted into the UltraZed™-EG board:
@@ -73,3 +75,4 @@ Once the SD card is prepared and inserted into the UltraZed™-EG board:
 ```bash
 # (adjust ttyUSB0 as needed)
 minicom -D /dev/ttyUSB0 -b 115200
+```
